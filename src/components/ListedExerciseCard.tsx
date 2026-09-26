@@ -39,7 +39,8 @@ const ListedExerciseCard = ({ exercise, onRemove }: ListedExerciseCardProps) => 
 
 
     return (
-        <div className="flex items-center gap-4 w-full bg-[#0B0F19] border border-neutral-800 rounded-2xl px-4 py-3">
+        <div className="flex w-full flex-col gap-4 rounded-2xl border border-neutral-800 bg-[#0B0F19] px-4 py-3 sm:flex-row sm:items-center">
+
             {/* Thumbnail */}
             <div className="shrink-0">
                 <Image
@@ -47,70 +48,82 @@ const ListedExerciseCard = ({ exercise, onRemove }: ListedExerciseCardProps) => 
                     alt={exercise.name}
                     width={64}
                     height={64}
-                    className="rounded-xl w-16 h-16 object-cover"
+                    className="h-16 w-16 rounded-xl object-cover"
                 />
             </div>
 
-            {/* Name / equipment / stats */}
-            <div className="flex-1 min-w-0">
-                <h3 className="uppercase font-extrabold text-white text-sm tracking-wide truncate">
+            {/* Name / Equipment / Stats */}
+            <div className="min-w-0 flex-1">
+                <h3 className="truncate text-sm font-extrabold uppercase tracking-wide text-white">
                     {exercise.name}
                 </h3>
-                <p className="text-neutral-400 text-xs mt-0.5">{exercise.equipment}</p>
 
-                <div className="flex items-center gap-4 mt-1.5">
-                    <div className="flex items-center gap-1 text-neutral-300 text-xs">
+                <p className="mt-0.5 text-xs text-neutral-400">
+                    {exercise.equipment}
+                </p>
+
+                {/* Stats */}
+                <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5">
+
+                    <div className="flex items-center gap-1 text-xs text-neutral-300">
                         <MdOutlineWatchLater className="text-[#C2F800]" />
-                        {exercise.duration} min
+                        <span>{exercise.duration} min</span>
                     </div>
-                    <div className="flex items-center gap-1 text-neutral-300 text-xs">
+
+                    <div className="flex items-center gap-1 text-xs text-neutral-300">
                         <GoFlame className="text-[#C2F800]" />
-                        {exercise.caloriesBurned} kcal
+                        <span>{exercise.caloriesBurned} kcal</span>
                     </div>
-                    <div className="flex items-center gap-1 text-neutral-300 text-xs">
+
+                    <div className="flex items-center gap-1 text-xs text-neutral-300">
                         <FaRegStar className="text-[#C2F800]" />
-                        {exercise.rating}
+                        <span>{exercise.rating}</span>
                     </div>
+
                 </div>
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="flex w-full shrink-0 flex-wrap items-center gap-2 sm:w-auto sm:flex-nowrap">
+
+                {/* View Details */}
                 <Link
-                    key={exercise.id}
                     href={`/exercise-details/${exercise.id}`}
-                    className="rounded-full border border-neutral-600 text-white text-xs font-semibold px-4 py-2 transition hover:border-[#C2F800] hover:text-[#C2F800]">
+                    className="flex-1 rounded-full border border-neutral-600 px-4 py-2 text-center text-xs font-semibold text-white transition hover:border-[#C2F800] hover:text-[#C2F800] sm:flex-none"
+                >
                     View Details
                 </Link>
 
-                {/* <button className="flex items-center gap-1.5 rounded-full bg-[#C2F800] text-black text-xs font-bold px-4 py-2 transition hover:bg-[#a9dd00]">
-                    <IoCheckmarkOutline strokeWidth={10} />
-                    Mark as Done
-                </button> */}
-
+                {/* Mark as Done */}
                 <button
                     onClick={handleMarkAsDone}
-                    className="flex items-center gap-1.5 rounded-full bg-[#C2F800] text-black text-xs font-bold px-4 py-2 transition hover:bg-[#a9dd00]"
+                    className="flex-1 rounded-full bg-[#C2F800] px-4 py-2 text-xs font-bold text-black transition hover:bg-[#a9dd00] sm:flex-none"
                 >
                     {isDone ? (
-                        <>
-                            <IoCheckmarkOutline strokeWidth={10} />
-                            Mark as Done
-                        </>
+                        <span className="flex items-center justify-center gap-1.5">
+                            <IoCheckmarkOutline
+                                className="text-lg font-bold"
+                                strokeWidth={10}
+                            />
+                            Marked as Done
+                        </span>
                     ) : (
-                        "Mark as Done"
+                        "Mark as Done!"
                     )}
                 </button>
 
+                {/* Remove */}
                 <button
                     onClick={onRemove}
                     aria-label="Remove"
-                    className="text-neutral-500 hover:text-white transition ml-1"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-neutral-500 transition hover:bg-neutral-800 hover:text-white"
                 >
                     <RxCross2 className="font-bold" />
                 </button>
+
             </div>
         </div>
+
     );
 };
 

@@ -1,14 +1,6 @@
-import React from 'react';
-import { ExerciseDataTypes } from '@/types/excercise.type';
 import Image from 'next/image';
-import Link from 'next/link';
-
 import AddTodayButton from '@/components/add-button/AddTodayButton';
-
 import SavedLaterButton from '@/components/add-button/SavedLaterButton';
-
-
-
 
 interface ExerciseDetailsType {
     params: Promise<{
@@ -19,11 +11,21 @@ interface ExerciseDetailsType {
 
 const ExerciseDetails = async ({ params }: ExerciseDetailsType) => {
 
+    // const { id } = await params;
+    // const res = await fetch(`https://api.abcz.workers.dev/api/fitlog/${id}`);
+    // const dataDetails = await res.json();
+    // console.log(dataDetails);
+    
     const { id } = await params;
-    const res = await fetch(`https://api.abcz.workers.dev/api/fitlog/${id}`);
-    const dataDetails = await res.json();
-    console.log(dataDetails);
+    const res = await fetch(
+        `https://api.abcz.workers.dev/api/fitlog/${id}`
+    );
 
+    if (!res.ok) {
+        throw new Error("Failed to fetch exercise details");
+    }
+
+    const dataDetails = await res.json();
 
     return (
         <div className="container mx-auto flex flex-col md:flex-row gap-6 px-4 py-8">
@@ -54,7 +56,7 @@ const ExerciseDetails = async ({ params }: ExerciseDetailsType) => {
 
                     {/* Muscle group badges */}
                     <div className="flex gap-2 flex-wrap mb-4">
-                        {dataDetails.muscleGroups.map((item, index) => (
+                        {dataDetails.muscleGroups.map((item: string, index: number) => (
                             <span
                                 key={index}
                                 className="rounded-full bg-[#C2F800] px-3 py-1 text-xs uppercase text-black font-bold tracking-wide"
@@ -131,7 +133,7 @@ const ExerciseDetails = async ({ params }: ExerciseDetailsType) => {
                     {/* Instructions */}
                     <h2 className="font-bold text-white text-lg mb-2">INSTRUCTIONS</h2>
                     <ol className="flex flex-col gap-3 mb-6 list-decimal list-inside marker:text-[#C2F800] marker:font-bold">
-                        {dataDetails.instructions.map((item, index) => (
+                        {dataDetails.instructions.map((item: string, index: number) => (
                             <li key={index} className="text-neutral-300 text-sm leading-relaxed pl-1">
                                 {item}
                             </li>
@@ -145,15 +147,15 @@ const ExerciseDetails = async ({ params }: ExerciseDetailsType) => {
                             Add to today's plan
                         </button> */}
 
-                        <AddTodayButton exercise={dataDetails}/>
+                        <AddTodayButton exercise={dataDetails} />
 
                         {/* <button className="flex items-center gap-2 border border-[#C2F800] rounded text-white px-4 py-2 text-sm font-bold transition hover:bg-[#C2F800] hover:text-black">
                             <FaRegBookmark />
                             Save for later
                         </button> */}
 
-                        <SavedLaterButton exercise={dataDetails}/>
-                            
+                        <SavedLaterButton exercise={dataDetails} />
+
 
                     </div>
                 </div>

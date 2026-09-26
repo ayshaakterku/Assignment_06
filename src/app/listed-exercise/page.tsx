@@ -1,17 +1,18 @@
 'use client'
+import { Suspense } from 'react';
 import { ExerciseContext } from '@/context/ExerciseContext';
 import { ExerciseDataTypes } from '@/types/excercise.type';
 import React, { useContext, useState } from 'react';
 import ListedExerciseCard from '@/components/ListedExerciseCard';
 import { toast, Bounce } from 'react-toastify';
 import Link from 'next/link';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation'; // ADDED
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import ListedExerciseCardForSaved from '@/components/ListedExerciseCardForSaved';
 
 const toastOptions = {
     position: "top-right" as const,
-    autoClose: 1000,           // no auto-dismiss timer
-    hideProgressBar: true,      // hides the bar even if autoClose is on
+    autoClose: 1000,
+    hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
@@ -23,13 +24,13 @@ const toastOptions = {
 type SortKey = 'duration' | 'rating' | 'caloriesBurned' | '';
 type TabKey = 'today' | 'saved';
 
-const ListedExercise = () => {
+// Renamed: inner component that actually uses useSearchParams
+const ListedExerciseContent = () => {
 
     const { todayExercise, setTodayExercise, savedExercise, setSavedExercise } = useContext(ExerciseContext);
 
     const [sortBy, setSortBy] = useState<SortKey>('duration');
 
-    // --- URL-synced tab state (ADDED) ---
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -43,7 +44,6 @@ const ListedExercise = () => {
         params.set('tab', tab);
         router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     };
-    // --- end addition ---
 
     const sortExercise = (exercise: ExerciseDataTypes[]) => {
         const sortedExercise = [...exercise];
@@ -60,19 +60,9 @@ const ListedExercise = () => {
     const sortedTodayExercise = sortExercise(todayExercise);
     const sortedSavedExercise = sortExercise(savedExercise);
 
-    const totalMinutes = todayExercise.reduce(
-        (sum: number, ex: ExerciseDataTypes) => sum + Number(ex.duration),
-        0
-    );
-    const totalCalories = todayExercise.reduce(
-        (sum: number, ex: ExerciseDataTypes) => sum + Number(ex.caloriesBurned),
-        0
-    );
-
     function removeToadyExById(id: string) {
         const todayEx = todayExercise.find((t: ExerciseDataTypes) => String(t.id) === id)
         if (todayEx) {
-            // toast.success(`${todayEx.name} removed from your stack`, toastOptions)
             toast.error("Removed from today's plan", toastOptions)
         }
         setTodayExercise((prev: ExerciseDataTypes[]) => prev.filter((t: ExerciseDataTypes) => String(t.id) !== id))
@@ -81,7 +71,6 @@ const ListedExercise = () => {
     function removeSavedExById(id: string) {
         const savedEx = savedExercise.find((t: ExerciseDataTypes) => String(t.id) === id)
         if (savedEx) {
-            // toast.success(`${savedEx.name} removed from your stack`, toastOptions)
             toast.error("Removed from Saved for later", toastOptions)
         }
         setSavedExercise((prev: ExerciseDataTypes[]) => prev.filter((t: ExerciseDataTypes) => String(t.id) !== id))
@@ -90,9 +79,16 @@ const ListedExercise = () => {
     const activeList = activeTab === 'today' ? sortedTodayExercise : sortedSavedExercise;
     const removeFn = activeTab === 'today' ? removeToadyExById : removeSavedExById;
 
-    {/* Empty Message */ }
+    const totalMinutes = activeList.reduce(
+        (sum: number, ex: ExerciseDataTypes) => sum + Number(ex.duration),
+        0
+    );
+    const totalCalories = activeList.reduce(
+        (sum: number, ex: ExerciseDataTypes) => sum + Number(ex.caloriesBurned),
+        0
+    );
+
     const emptyMessage = (
-        // <div className="flex flex-col items-center justify-center text-center bg-[#111317] border-white/10 border-dotted rounded-2xl px-6 py-14">
         <div className="flex flex-col items-center justify-center text-center bg-[#111317] border border-dotted border-white/10 rounded-2xl px-6 py-14">
             <h2 className="font-extrabold text-2xl md:text-3xl text-white tracking-wide">NOTHING HERE YET</h2>
             <p className="text-neutral-400 text-sm mt-2 max-w-sm">
@@ -112,7 +108,6 @@ const ListedExercise = () => {
     return (
         <div className="space-y-4 container mx-auto py-[20px]">
 
-            {/* Header */}
             <div>
                 <h2 className="font-extrabold text-3xl md:text-4xl text-white tracking-wide">
                     MY PLAN
@@ -122,12 +117,11 @@ const ListedExercise = () => {
                 </p>
             </div>
 
-            {/* Stats panel */}
-            {/* <div className="bg-[#0B0F19] border border-neutral-800 rounded-2xl grid grid-cols-3 px-6 py-5"> */}
+                {/* Summar Table */}
             <div className="bg-[#0B0F19] border border-neutral-800 rounded-2xl grid grid-cols-3 divide-x divide-neutral-800 px-6 py-5">
                 <div className='pl-8'>
                     <p className="text-[#8A92A0] text-xs uppercase tracking-wide">Exercises</p>
-                    <h1 className="text-[#C2F800] font-extrabold text-5xl mt-1">{todayExercise.length}</h1>
+                    <h1 className="text-[#C2F800] font-extrabold text-5xl mt-1">{activeList.length}</h1>
                 </div>
                 <div className='pl-8'>
                     <p className="text-[#8A92A0] text-xs uppercase tracking-wide">Minutes</p>
@@ -139,7 +133,7 @@ const ListedExercise = () => {
                 </div>
             </div>
 
-            {/* Tabs + Sort */}
+
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 bg-[#0B0F19] border border-neutral-800 rounded-full p-1">
                     <button
@@ -176,7 +170,6 @@ const ListedExercise = () => {
                 </div>
             </div>
 
-            {/* Exercise list */}
             <div className="space-y-3">
                 {activeList.length > 0 ? (
                     activeTab === 'today' ? (
@@ -206,4 +199,14 @@ const ListedExercise = () => {
     );
 };
 
+// New default export wraps the content in Suspense
+const ListedExercise = () => {
+    return (
+        <Suspense fallback={null}>
+            <ListedExerciseContent />
+        </Suspense>
+    );
+};
+
 export default ListedExercise;
+

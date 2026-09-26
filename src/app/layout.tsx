@@ -27,23 +27,31 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      {/* <body className="min-h-full flex flex-col bg-black text-white">
-        <NavBar/>
-        
-        {children}
-        <Footer/>
-        </body> */}
-
       <ExerciseProvider>
-        <body className="min-h-screen bg-black text-white">
-          <div className="min-h-screen bg-black">
-            <NavBar />
+        <body className="flex flex-col min-h-screen bg-black text-white">
+          <NavBar />
+          <div className="bg-black flex-1">
             {children}
             <ToastContainer />
-            {/* <Footer /> */}
           </div>
+          <Footer />
         </body>
       </ExerciseProvider>
     </html>
+    // <html
+    //   lang="en"
+    //   className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    // >
+    //   <ExerciseProvider>
+    //     <body className="min-h-screen bg-black text-white">
+    //       <div className="min-h-screen bg-black">
+    //         <NavBar />
+    //         {children}
+    //         <ToastContainer />
+    //       </div>
+    //       <Footer />
+    //     </body>
+    //   </ExerciseProvider>
+    // </html>
   );
 }

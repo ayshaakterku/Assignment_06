@@ -1,13 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 import bannerImage from "../../assets/banner.png"
 
 const Banner = () => {
     return (
         <section className="container mx-auto mt-8 flex items-center justify-between gap-6 border rounded-2xl border-[#222630] bg-[#15171D] px-6 py-8">
+
+
             {/* Left Content */}
-            <div className="w-[55%]">
+            <div className="w-[55%] pl-10">
                 <p className="mb-2 text-sm font-bold tracking-widest text-[#C2F800]">
                     WORKOUT LIBRARY
                 </p>
@@ -40,20 +41,8 @@ const Banner = () => {
                     priority
                 />
             </div>
+
         </section>
-        // <section className='container mx-auto border-[#222630] bg-[#15171D] flex justify-between items-center'>
-        //     <div className='grid grid-col-1'>
-        //         <p className="text-[#C2F800]">WORKOUT LIBRARY</p>
-
-        //         <h1 className='font-extrabold text-4xl text-white '>TRAIN WITH INTENT. LOG<br />EVERY SET.</h1>
-
-        //         <p className='text-[#9CA3AF]'>FitLog is a dark, no-nonsense gym companion: pick a lift, lock it into today's plan, and watch the week's work add up.</p>
-        //         <Link href="" className="border p-4  bg-[#C2F800] text-black">BROWSE WORKOUTS</Link>
-        //     </div>
-        //     <div>
-        //         <Image src={bannerImage} alt='Banner Image' />
-        //     </div>
-        // </section>
     );
 };
 

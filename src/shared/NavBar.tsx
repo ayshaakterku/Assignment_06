@@ -14,10 +14,11 @@ const links = [
 
 const NavBar = () => {
     const pathname = usePathname();
+
     const { todayExercise, savedExercise } = useContext(ExerciseContext);
 
     return (
-        <div className="border-b border-[#222630] bg-[#15171D]">
+        <div className="sticky top-0 z-50 border-b border-[#222630] bg-[#15171D]">
             <div className="navbar container mx-auto shadow-sm">
 
                 {/* Left: Logo + Mobile Menu */}

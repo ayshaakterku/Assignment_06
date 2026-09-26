@@ -1,13 +1,10 @@
 "use client";
 
-import React from 'react';
 import Image from 'next/image';
 import { ExerciseDataTypes } from '@/types/excercise.type';
-
 import { MdOutlineWatchLater } from 'react-icons/md';
 import { GoFlame } from 'react-icons/go';
 import { FaRegStar } from 'react-icons/fa';
-import { IoCheckmarkOutline } from 'react-icons/io5';
 import { RxCross2 } from 'react-icons/rx';
 import Link from 'next/link';
 

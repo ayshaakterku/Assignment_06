@@ -1,11 +1,16 @@
-import React from 'react';
+import Image from 'next/image';
+import logo from "../assets/logo.png";
 
 const Footer = () => {
     return (
-        <div>
-            <footer className="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
+        <div className='w-full bg-[#15171D]'>
+            <footer className="container flex mx-auto justify-between footer sm:footer-horizontal footer-center text-base-content p-4">
+                <aside className='flex items-center gap-2'>
+                    <Image src={logo} alt='logo' className='w-8 h-8' />
+                    <h2 className='font-bold'>FITLOG</h2>
+                </aside>
                 <aside>
-                    <p>Copyright © {new Date().getFullYear()} - All right reserved by ACME Industries Ltd</p>
+                    <p>© {new Date().getFullYear()} FitLog — Workout Library. Train hard, log honest.</p>
                 </aside>
             </footer>
         </div>

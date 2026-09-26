@@ -32,24 +32,40 @@ const AddTodayButton = ({ exercise }: { exercise: ExerciseDataTypes }) => {
         (ex: ExerciseDataTypes) => ex.id === exercise.id
     );
 
+    // toggling purpose
+    // const handleTodayExercise = () => {
+
+    //     if (isAdded) {
+    //         setTodayExercise(
+    //             todayExercise.filter(
+    //                 (ex: ExerciseDataTypes) => ex.id !== exercise.id
+    //                 // (ex: ExerciseDataTypes) => ex.id === exercise.id
+    //             )
+    //         );
+    //         // toast.info(`Removed from today's plan: ${exercise.name}`);
+    //         toast.error(`Already in plan`, toastOptions);
+
+    //     } else {
+    //         setTodayExercise([...todayExercise, exercise]);
+
+    //         toast.info(`Added to today's plan`, toastOptions);
+    //     }
+    // };
+
+    
+    // Button deactivated if one time selected
     const handleTodayExercise = () => {
 
         if (isAdded) {
-            setTodayExercise(
-                todayExercise.filter(
-                    // (ex: ExerciseDataTypes) => ex.id !== exercise.id
-                    (ex: ExerciseDataTypes) => ex.id === exercise.id
-                )
-            );
-            // toast.info(`Removed from today's plan: ${exercise.name}`);
+            todayExercise.find((ex: ExerciseDataTypes) => ex.id === exercise.id)
             toast.error(`Already in plan`, toastOptions);
 
         } else {
-            setTodayExercise([...todayExercise, exercise]);
-
+            setTodayExercise((prev: ExerciseDataTypes[]) => [...prev, exercise]);
             toast.info(`Added to today's plan`, toastOptions);
         }
-    };
+    }
+
 
     return (
         <button
