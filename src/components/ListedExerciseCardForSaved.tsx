@@ -1,43 +1,22 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { ExerciseDataTypes } from '@/types/excercise.type';
+
 import { MdOutlineWatchLater } from 'react-icons/md';
 import { GoFlame } from 'react-icons/go';
 import { FaRegStar } from 'react-icons/fa';
 import { IoCheckmarkOutline } from 'react-icons/io5';
 import { RxCross2 } from 'react-icons/rx';
 import Link from 'next/link';
-import { Bounce, toast } from 'react-toastify';
 
 type ListedExerciseCardProps = {
     exercise: ExerciseDataTypes;
     onRemove: () => void;
 };
 
-const toastOptions = {
-    position: "top-right" as const,
-    autoClose: 1000,           // no auto-dismiss timer
-    hideProgressBar: true,      // hides the bar even if autoClose is on
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'light' as const,
-    transition: Bounce,
-}
-
-const ListedExerciseCard = ({ exercise, onRemove }: ListedExerciseCardProps) => {
-
-    // for Mark as done button
-    const [isDone, setIsDone] = useState<boolean>(false);
-    const handleMarkAsDone = (): void => {
-        setIsDone(true);
-        toast.info("Marked as done", toastOptions);
-    };
-
-
+const ListedExerciseCardForSaved = ({ exercise, onRemove }: ListedExerciseCardProps) => {
     return (
         <div className="flex items-center gap-4 w-full bg-[#0B0F19] border border-neutral-800 rounded-2xl px-4 py-3">
             {/* Thumbnail */}
@@ -76,10 +55,10 @@ const ListedExerciseCard = ({ exercise, onRemove }: ListedExerciseCardProps) => 
 
             {/* Actions */}
             <div className="flex items-center gap-3 shrink-0">
-                <Link
-                    key={exercise.id}
-                    href={`/exercise-details/${exercise.id}`}
-                    className="rounded-full border border-neutral-600 text-white text-xs font-semibold px-4 py-2 transition hover:border-[#C2F800] hover:text-[#C2F800]">
+                <Link 
+                key={exercise.id}
+                href={`/exercise-details/${exercise.id}`}
+                className="rounded-full border border-neutral-600 text-white text-xs font-semibold px-4 py-2 transition hover:border-[#C2F800] hover:text-[#C2F800]">
                     View Details
                 </Link>
 
@@ -87,20 +66,6 @@ const ListedExerciseCard = ({ exercise, onRemove }: ListedExerciseCardProps) => 
                     <IoCheckmarkOutline strokeWidth={10} />
                     Mark as Done
                 </button> */}
-
-                <button
-                    onClick={handleMarkAsDone}
-                    className="flex items-center gap-1.5 rounded-full bg-[#C2F800] text-black text-xs font-bold px-4 py-2 transition hover:bg-[#a9dd00]"
-                >
-                    {isDone ? (
-                        <>
-                            <IoCheckmarkOutline strokeWidth={10} />
-                            Mark as Done
-                        </>
-                    ) : (
-                        "Mark as Done"
-                    )}
-                </button>
 
                 <button
                     onClick={onRemove}
@@ -114,4 +79,4 @@ const ListedExerciseCard = ({ exercise, onRemove }: ListedExerciseCardProps) => 
     );
 };
 
-export default ListedExerciseCard;
+export default ListedExerciseCardForSaved;

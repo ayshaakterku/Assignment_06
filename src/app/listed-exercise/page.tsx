@@ -1,11 +1,12 @@
 'use client'
 import { ExerciseContext } from '@/context/ExerciseContext';
 import { ExerciseDataTypes } from '@/types/excercise.type';
-import React, { useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import ListedExerciseCard from '@/components/ListedExerciseCard';
 import { toast, Bounce } from 'react-toastify';
 import Link from 'next/link';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'; // ADDED
+import ListedExerciseCardForSaved from '@/components/ListedExerciseCardForSaved';
 
 const toastOptions = {
     position: "top-right" as const,
@@ -89,7 +90,7 @@ const ListedExercise = () => {
     const activeList = activeTab === 'today' ? sortedTodayExercise : sortedSavedExercise;
     const removeFn = activeTab === 'today' ? removeToadyExById : removeSavedExById;
 
-        {/* Empty Message */}
+    {/* Empty Message */ }
     const emptyMessage = (
         // <div className="flex flex-col items-center justify-center text-center bg-[#111317] border-white/10 border-dotted rounded-2xl px-6 py-14">
         <div className="flex flex-col items-center justify-center text-center bg-[#111317] border border-dotted border-white/10 rounded-2xl px-6 py-14">
@@ -123,7 +124,7 @@ const ListedExercise = () => {
 
             {/* Stats panel */}
             {/* <div className="bg-[#0B0F19] border border-neutral-800 rounded-2xl grid grid-cols-3 px-6 py-5"> */}
-            <div className="bg-[#0B0F19] border border-neutral-800 rounded-2xl grid grid-cols-3 divide-x divide-neutral-800 px-6 py-5">    
+            <div className="bg-[#0B0F19] border border-neutral-800 rounded-2xl grid grid-cols-3 divide-x divide-neutral-800 px-6 py-5">
                 <div className='pl-8'>
                     <p className="text-[#8A92A0] text-xs uppercase tracking-wide">Exercises</p>
                     <h1 className="text-[#C2F800] font-extrabold text-5xl mt-1">{todayExercise.length}</h1>
@@ -178,13 +179,23 @@ const ListedExercise = () => {
             {/* Exercise list */}
             <div className="space-y-3">
                 {activeList.length > 0 ? (
-                    activeList.map((exercise: ExerciseDataTypes) => (
-                        <ListedExerciseCard
-                            key={exercise.id}
-                            exercise={exercise}
-                            onRemove={() => removeFn(String(exercise.id))}
-                        />
-                    ))
+                    activeTab === 'today' ? (
+                        activeList.map((exercise: ExerciseDataTypes) => (
+                            <ListedExerciseCard
+                                key={exercise.id}
+                                exercise={exercise}
+                                onRemove={() => removeFn(String(exercise.id))}
+                            />
+                        ))
+                    ) : (
+                        activeList.map((exercise: ExerciseDataTypes) => (
+                            <ListedExerciseCardForSaved
+                                key={exercise.id}
+                                exercise={exercise}
+                                onRemove={() => removeFn(String(exercise.id))}
+                            />
+                        ))
+                    )
                 ) : (
                     <div className="text-center text-lg font-semibold text-neutral-400 py-10">
                         {emptyMessage}
