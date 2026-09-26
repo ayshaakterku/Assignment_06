@@ -115,7 +115,8 @@ const NavBar = () => {
                         className="flex items-center gap-2 text-white"
                     >
                         Plan
-                        <span className="badge badge-sm bg-[#C2F800] text-black">
+                        {/* <span className="badge badge-sm font-bold bg-[#C2F800] text-black"> */}
+                        <span className="flex items-center justify-center w-6 h-6 rounded-full font-bold bg-[#C2F800] text-black text-sm">
                             {todayExercise.length}
                         </span>
                     </Link>
@@ -125,7 +126,10 @@ const NavBar = () => {
                         className="flex items-center gap-2 text-white"
                     >
                         Saved
-                        <span className="badge badge-sm">{savedExercise.length}</span>
+                        {/* <span className="badge badge-sm font-bold border-amber-50 py-1">{savedExercise.length}</span> */}
+                        <span className="flex items-center justify-center w-6 h-6 rounded-full font-bold border border-amber-50 text-sm">
+                            {savedExercise.length}
+                        </span>
                     </Link>
                 </div>
             </div>
