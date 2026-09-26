@@ -4,6 +4,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { FaRegBookmark, FaRegCalendarPlus} from 'react-icons/fa';
+import AddTodayButton from '@/components/add-button/AddTodayButton';
+
+import SavedLaterButton from '@/components/add-button/SavedLaterButton';
+
 
 
 
@@ -137,15 +141,21 @@ const ExerciseDetails = async ({ params }: ExerciseDetailsType) => {
 
                     {/* Buttons */}
                     <div className="flex gap-3 flex-wrap">
-                        <button className="flex items-center gap-2 border border-[#C2F800] rounded bg-[#C2F800] px-4 py-2 text-sm font-bold text-black transition hover:bg-transparent hover:text-[#C2F800]">
+                        {/* <button className="flex items-center gap-2 border border-[#C2F800] rounded bg-[#C2F800] px-4 py-2 text-sm font-bold text-black transition hover:bg-transparent hover:text-[#C2F800]">
                             <FaRegCalendarPlus />
                             Add to today's plan
-                        </button>
+                        </button> */}
 
-                        <button className="flex items-center gap-2 border border-[#C2F800] rounded text-white px-4 py-2 text-sm font-bold transition hover:bg-[#C2F800] hover:text-black">
+                        <AddTodayButton exercise={dataDetails}/>
+
+                        {/* <button className="flex items-center gap-2 border border-[#C2F800] rounded text-white px-4 py-2 text-sm font-bold transition hover:bg-[#C2F800] hover:text-black">
                             <FaRegBookmark />
                             Save for later
-                        </button>
+                        </button> */}
+
+                        <SavedLaterButton exercise={dataDetails}/>
+                            
+
                     </div>
                 </div>
             </div>

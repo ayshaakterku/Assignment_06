@@ -4,14 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import logo from "../assets/logo.png";
+import { useContext } from "react";
+import { ExerciseContext } from "@/context/ExerciseContext";
 
 const links = [
     { label: "Workouts", href: "/" },
-    { label: "My Plan", href: "/plan" },
+    { label: "My Plan", href: "/listed-exercise" },
 ];
 
 const NavBar = () => {
     const pathname = usePathname();
+    const { todayExercise, savedExercise } = useContext(ExerciseContext);
 
     return (
         <div className="border-b border-[#222630] bg-[#15171D]">
@@ -108,12 +111,12 @@ const NavBar = () => {
                 {/* Right */}
                 <div className="navbar-end gap-4">
                     <Link
-                        href="/plan"
+                        href="/listed-exercise"
                         className="flex items-center gap-2 text-white"
                     >
                         Plan
                         <span className="badge badge-sm bg-[#C2F800] text-black">
-                            10
+                            {todayExercise.length}
                         </span>
                     </Link>
 
@@ -122,7 +125,7 @@ const NavBar = () => {
                         className="flex items-center gap-2 text-white"
                     >
                         Saved
-                        <span className="badge badge-sm">0</span>
+                        <span className="badge badge-sm">{savedExercise.length}</span>
                     </Link>
                 </div>
             </div>

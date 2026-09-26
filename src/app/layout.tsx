@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/shared/NavBar";
 import Footer from "@/shared/Footer";
+import ExerciseProvider from "@/context/ExerciseContext";
+import { ToastContainer } from "react-toastify";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,14 +34,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Footer/>
         </body> */}
 
-      <body className="min-h-screen bg-black text-white">
-        <div className="min-h-screen bg-black">
-          <NavBar />
-          {children}
-          {/* <Footer /> */}
-        </div>
-      </body>
-
+      <ExerciseProvider>
+        <body className="min-h-screen bg-black text-white">
+          <div className="min-h-screen bg-black">
+            <NavBar />
+            {children}
+            <ToastContainer />
+            {/* <Footer /> */}
+          </div>
+        </body>
+      </ExerciseProvider>
     </html>
   );
 }
