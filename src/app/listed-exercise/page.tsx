@@ -1,7 +1,7 @@
 'use client'
 import { ExerciseContext } from '@/context/ExerciseContext';
 import { ExerciseDataTypes } from '@/types/excercise.type';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, Suspense } from 'react';
 import Image from "next/image";
 
 import ListedExerciseCard from '@/components/ListedExerciseCard';
@@ -13,6 +13,7 @@ import { IoCheckmarkOutline } from 'react-icons/io5';
 
 import { toast, Bounce } from 'react-toastify';
 import Link from 'next/link';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'; // ADDED
 
 const toastOptions = {
     position: 'top-center' as const,
@@ -26,9 +27,6 @@ const toastOptions = {
     transition: Bounce,
 }
 
-
-
-
 type SortKey = 'duration' | 'rating' | 'caloriesBurned' | '';
 type TabKey = 'today' | 'saved';
 
@@ -37,7 +35,22 @@ const ListedExercise = () => {
     const { todayExercise, setTodayExercise, savedExercise, setSavedExercise } = useContext(ExerciseContext);
 
     const [sortBy, setSortBy] = useState<SortKey>('duration');
-    const [activeTab, setActiveTab] = useState<TabKey>('today');
+
+    // --- URL-synced tab state (ADDED) ---
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    const tabFromUrl = (searchParams.get('tab') as TabKey) || 'today';
+    const [activeTab, setActiveTabState] = useState<TabKey>(tabFromUrl);
+
+    const setActiveTab = (tab: TabKey) => {
+        setActiveTabState(tab);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('tab', tab);
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    };
+    // --- end addition ---
 
     const sortExercise = (exercise: ExerciseDataTypes[]) => {
         const sortedExercise = [...exercise];
@@ -63,7 +76,6 @@ const ListedExercise = () => {
         0
     );
 
-    // Individual Id removed from stack list
     function removeToadyExById(id: string) {
         const todayEx = todayExercise.find((t: ExerciseDataTypes) => String(t.id) === id)
         if (todayEx) {
@@ -82,22 +94,24 @@ const ListedExercise = () => {
 
     const activeList = activeTab === 'today' ? sortedTodayExercise : sortedSavedExercise;
     const removeFn = activeTab === 'today' ? removeToadyExById : removeSavedExById;
-    
-    const emptyMessage = activeTab === 'today' ? (<div className="flex flex-col items-center justify-center text-center bg-[#0B0F19] rounded-2xl px-6 py-14">
-        <h2 className="font-extrabold text-2xl md:text-3xl text-white tracking-wide">NOTHING HERE YET</h2>
-        <p className="text-neutral-400 text-sm mt-2 max-w-sm">
-            Browse the library and add a lift to get today moving.</p>
-        <Link
-            href='/'
-            className="mt-6 rounded-full bg-[#C2F800] text-black text-sm font-bold px-6 py-3 transition hover:bg-[#a9dd00]"
-        >
-            Go to workouts
-        </Link>
-    </div>) : (
-    <div className="text-white">
-      No saved exercises yet.
-    </div>
-  );;
+
+    // ... rest of your JSX stays EXACTLY the same, including the tab buttons which already call setActiveTab('today') / setActiveTab('saved')
+    const emptyMessage = (
+        <div className="flex flex-col items-center justify-center text-center bg-[#0B0F19] rounded-2xl px-6 py-14">
+            <h2 className="font-extrabold text-2xl md:text-3xl text-white tracking-wide">NOTHING HERE YET</h2>
+            <p className="text-neutral-400 text-sm mt-2 max-w-sm">
+                {activeTab === 'today'
+                    ? 'Browse the library and add a lift to get today moving.'
+                    : 'Browse the library and add a lift to get upcoming move.'}
+            </p>
+            <Link
+                href='/'
+                className="mt-6 rounded-full bg-[#C2F800] text-black text-sm font-bold px-6 py-3 transition hover:bg-[#a9dd00]"
+            >
+                Go to workouts
+            </Link>
+        </div>
+    );
 
     return (
         <div className="space-y-4 container mx-auto py-[20px]">
@@ -134,8 +148,8 @@ const ListedExercise = () => {
                     <button
                         onClick={() => setActiveTab('today')}
                         className={`px-4 py-1.5 rounded-full text-xs font-semibold transition ${activeTab === 'today'
-                                ? 'bg-neutral-200 text-black'
-                                : 'text-neutral-400 hover:text-white'
+                            ? 'bg-neutral-200 text-black'
+                            : 'text-neutral-400 hover:text-white'
                             }`}
                     >
                         Today&apos;s Plan
@@ -143,8 +157,8 @@ const ListedExercise = () => {
                     <button
                         onClick={() => setActiveTab('saved')}
                         className={`px-4 py-1.5 rounded-full text-xs font-semibold transition ${activeTab === 'saved'
-                                ? 'bg-neutral-200 text-black'
-                                : 'text-neutral-400 hover:text-white'
+                            ? 'bg-neutral-200 text-black'
+                            : 'text-neutral-400 hover:text-white'
                             }`}
                     >
                         Saved
@@ -186,6 +200,92 @@ const ListedExercise = () => {
 };
 
 export default ListedExercise;
+// 'use client'
+// import { ExerciseContext } from '@/context/ExerciseContext';
+// import { ExerciseDataTypes } from '@/types/excercise.type';
+// import React, { useContext, useState } from 'react';
+// import Image from "next/image";
+
+// import ListedExerciseCard from '@/components/ListedExerciseCard';
+// import { MdOutlineWatchLater } from 'react-icons/md';
+// import { GoFlame } from 'react-icons/go';
+// import { FaRegStar } from 'react-icons/fa';
+// import { RxCross2 } from 'react-icons/rx';
+// import { IoCheckmarkOutline } from 'react-icons/io5';
+
+// import { toast, Bounce } from 'react-toastify';
+// import Link from 'next/link';
+
+// const toastOptions = {
+//     position: 'top-center' as const,
+//     autoClose: 2000,
+//     hideProgressBar: false,
+//     closeOnClick: false,
+//     pauseOnHover: true,
+//     draggable: true,
+//     progress: undefined,
+//     theme: 'light' as const,
+//     transition: Bounce,
+// }
+
+
+
+
+// type SortKey = 'duration' | 'rating' | 'caloriesBurned' | '';
+// type TabKey = 'today' | 'saved';
+
+// const ListedExercise = () => {
+
+//     const { todayExercise, setTodayExercise, savedExercise, setSavedExercise } = useContext(ExerciseContext);
+
+//     const [sortBy, setSortBy] = useState<SortKey>('duration');
+//     const [activeTab, setActiveTab] = useState<TabKey>('today');
+
+//     const sortExercise = (exercise: ExerciseDataTypes[]) => {
+//         const sortedExercise = [...exercise];
+//         if (sortBy === "duration") {
+//             sortedExercise.sort((a, b) => b.duration - a.duration)
+//         } else if (sortBy === "rating") {
+//             sortedExercise.sort((a, b) => b.rating - a.rating)
+//         } else if (sortBy === "caloriesBurned") {
+//             sortedExercise.sort((a, b) => b.caloriesBurned - a.caloriesBurned)
+//         }
+//         return sortedExercise
+//     }
+
+//     const sortedTodayExercise = sortExercise(todayExercise);
+//     const sortedSavedExercise = sortExercise(savedExercise);
+
+//     const totalMinutes = todayExercise.reduce(
+//         (sum: number, ex: ExerciseDataTypes) => sum + Number(ex.duration),
+//         0
+//     );
+//     const totalCalories = todayExercise.reduce(
+//         (sum: number, ex: ExerciseDataTypes) => sum + Number(ex.caloriesBurned),
+//         0
+//     );
+
+//     // Individual Id removed from stack list
+//     function removeToadyExById(id: string) {
+//         const todayEx = todayExercise.find((t: ExerciseDataTypes) => String(t.id) === id)
+//         if (todayEx) {
+//             toast.success(`${todayEx.name} removed from your stack`, toastOptions)
+//         }
+//         setTodayExercise((prev: ExerciseDataTypes[]) => prev.filter((t: ExerciseDataTypes) => String(t.id) !== id))
+//     };
+
+//     function removeSavedExById(id: string) {
+//         const savedEx = savedExercise.find((t: ExerciseDataTypes) => String(t.id) === id)
+//         if (savedEx) {
+//             toast.success(`${savedEx.name} removed from your stack`, toastOptions)
+//         }
+//         setSavedExercise((prev: ExerciseDataTypes[]) => prev.filter((t: ExerciseDataTypes) => String(t.id) !== id))
+//     }
+
+//     const activeList = activeTab === 'today' ? sortedTodayExercise : sortedSavedExercise;
+//     const removeFn = activeTab === 'today' ? removeToadyExById : removeSavedExById;
+
+
 
 
 

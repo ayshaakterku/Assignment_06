@@ -9,6 +9,7 @@ import { GoFlame } from 'react-icons/go';
 import { FaRegStar } from 'react-icons/fa';
 import { IoCheckmarkOutline } from 'react-icons/io5';
 import { RxCross2 } from 'react-icons/rx';
+import Link from 'next/link';
 
 type ListedExerciseCardProps = {
     exercise: ExerciseDataTypes;
@@ -54,9 +55,12 @@ const ListedExerciseCard = ({ exercise, onRemove }: ListedExerciseCardProps) => 
 
             {/* Actions */}
             <div className="flex items-center gap-3 shrink-0">
-                <button className="rounded-full border border-neutral-600 text-white text-xs font-semibold px-4 py-2 transition hover:border-[#C2F800] hover:text-[#C2F800]">
+                <Link 
+                key={exercise.id}
+                href={`/exercise-details/${exercise.id}`}
+                className="rounded-full border border-neutral-600 text-white text-xs font-semibold px-4 py-2 transition hover:border-[#C2F800] hover:text-[#C2F800]">
                     View Details
-                </button>
+                </Link>
 
                 <button className="flex items-center gap-1.5 rounded-full bg-[#C2F800] text-black text-xs font-bold px-4 py-2 transition hover:bg-[#a9dd00]">
                     <IoCheckmarkOutline strokeWidth={10} />

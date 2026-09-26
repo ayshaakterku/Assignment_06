@@ -111,7 +111,7 @@ const NavBar = () => {
                 {/* Right */}
                 <div className="navbar-end gap-4">
                     <Link
-                        href="/listed-exercise"
+                        href="/listed-exercise?tab=today"
                         className="flex items-center gap-2 text-white"
                     >
                         Plan
@@ -121,7 +121,7 @@ const NavBar = () => {
                     </Link>
 
                     <Link
-                        href="/saved"
+                        href="/listed-exercise?tab=saved"
                         className="flex items-center gap-2 text-white"
                     >
                         Saved

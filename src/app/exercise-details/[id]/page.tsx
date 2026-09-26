@@ -3,7 +3,6 @@ import { ExerciseDataTypes } from '@/types/excercise.type';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { FaRegBookmark, FaRegCalendarPlus} from 'react-icons/fa';
 import AddTodayButton from '@/components/add-button/AddTodayButton';
 
 import SavedLaterButton from '@/components/add-button/SavedLaterButton';
