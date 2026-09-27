@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from 'next/image';
 import { ExerciseDataTypes } from '@/types/excercise.type';
 import { MdOutlineWatchLater } from 'react-icons/md';
@@ -10,7 +10,8 @@ import { IoCheckmarkOutline } from 'react-icons/io5';
 import { RxCross2 } from 'react-icons/rx';
 import Link from 'next/link';
 import { Bounce, toast } from 'react-toastify';
-
+import { ExerciseContext } from '@/context/ExerciseContext';
+import { useEffect } from "react";
 type ListedExerciseCardProps = {
     exercise: ExerciseDataTypes;
     onRemove: () => void;
@@ -30,11 +31,27 @@ const toastOptions = {
 
 const ListedExerciseCard = ({ exercise, onRemove }: ListedExerciseCardProps) => {
 
-    // for Mark as done button
+
+    // for Mark as done button; data will be save in local storage
     const [isDone, setIsDone] = useState<boolean>(false);
+
+    useEffect(() => {
+        const saved = localStorage.getItem(`exerciseDone:${exercise.id}`);
+
+        if (saved === "true") {
+            setIsDone(true);
+        }
+    }, [exercise.id]);
+
     const handleMarkAsDone = (): void => {
         setIsDone(true);
+        localStorage.setItem(`exerciseDone:${exercise.id}`, "true");
         toast.info("Marked as done", toastOptions);
+    };
+
+    const handleMarkAsDoneUndo = (): void => {
+        setIsDone(false);
+        localStorage.setItem(`exerciseDone:${exercise.id}`, "false");
     };
 
 
@@ -96,7 +113,7 @@ const ListedExerciseCard = ({ exercise, onRemove }: ListedExerciseCardProps) => 
 
                 {/* Mark as Done */}
                 <button
-                    onClick={handleMarkAsDone}
+                    onClick={isDone ? handleMarkAsDoneUndo : handleMarkAsDone}
                     className="flex-1 rounded-full bg-[#C2F800] px-4 py-2 text-xs font-bold text-black transition hover:bg-[#a9dd00] sm:flex-none"
                 >
                     {isDone ? (
@@ -114,7 +131,10 @@ const ListedExerciseCard = ({ exercise, onRemove }: ListedExerciseCardProps) => 
 
                 {/* Remove */}
                 <button
-                    onClick={onRemove}
+                    onClick={() => {
+                        handleMarkAsDoneUndo();
+                        onRemove();
+                    }}
                     aria-label="Remove"
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-neutral-500 transition hover:bg-neutral-800 hover:text-white"
                 >

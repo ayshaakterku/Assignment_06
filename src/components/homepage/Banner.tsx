@@ -25,7 +25,7 @@ const Banner = () => {
                 </p>
 
                 <Link
-                    href=""
+                    href="/listed-exercise"
                     className="inline-block border border-[#C2F800] rounded bg-[#C2F800] px-4 py-2 text-sm font-bold text-black transition hover:bg-transparent hover:text-[#C2F800]"
                 >
                     BROWSE WORKOUTS

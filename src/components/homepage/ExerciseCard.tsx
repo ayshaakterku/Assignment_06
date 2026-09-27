@@ -1,7 +1,6 @@
 import { ExerciseDataTypes } from '@/types/excercise.type';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
 import { FaRegStar } from 'react-icons/fa';
 import { GoFlame } from 'react-icons/go';
 import { MdOutlineWatchLater } from 'react-icons/md';
